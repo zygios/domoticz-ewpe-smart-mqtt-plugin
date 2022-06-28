@@ -7,6 +7,36 @@ Python plugin for Domoticz to control ewpe-smart powered air conditioners which 
 
 Setup [ewpe-smart-mqtt](https://github.com/stas-demydiuk/ewpe-smart-mqtt) bridge
 
+##EWPE-SMART-MQTT autorun
+
+1. cd /etc/systemd/system
+2. sudo nano ewpe-smart-mqtt.service
+
+Write next text to file:
+```
+[Unit]
+Description=EWPE Smart MQTT
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+WorkingDirectory=/home/ewpe-smart-mqtt
+ExecStart=node --expose-gc /home/ewpe-smart-mqtt/index.js
+Restart=always
+RestartSec=1
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ewpe-smart-mqtt
+User=root
+Group=root
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+```
+3. sudo chmod 777 ewpe-smart-mqtt.service
+4. sudo systemctl enable ewpe-smart-mqtt.service
+
 ## Installation
 
 1. Clone repository into your domoticz plugins folder
